@@ -1,0 +1,217 @@
+openapi: 3.0.3
+
+info: #Requied
+  title: ToDoList
+  description: This is backend api of ToDoList app
+  version: 1.0.0
+
+servers:
+- url : /
+  description: prod environment
+- url: http://{host}:{port}/todo_list/v0
+  description: Development in localhost
+  variables:
+    host:
+      default: localhost
+    port:
+      default: "3000"
+
+paths: #Required
+  '/item/{user_id}': #CRUD api requests ToDoList Data in s3
+    get:
+      summary: Call Lambda to read data in s3
+      description: Get ToDoList item
+      parameters:
+        - name: user_id
+          in: path
+          schema:
+            $ref: '#/components/schemas/user_id'
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user_id'
+        required: true
+      tags:
+      - todolist_items
+      responses:
+        '200':
+          description: when request and response apis 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/todolist_item'          
+    put:
+      summary: Call Lambda to put data in s3
+      description: renew ToDoList item
+      parameters:
+        - name: user_id
+          in: path 
+          required: true
+          schema:
+            $ref: '#/components/schemas/user_id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/todolist_item'
+        required: true
+      tags:
+      - todolist_items
+      responses:
+        '201':
+          description: when request and response apis 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_status'
+    post:
+      summary: Call Lambda to add data in s3
+      description: Post new ToDoList item
+      parameters:
+        - name: user_id
+          required: true
+          in: path 
+          schema:
+            $ref: '#/components/schemas/user_id'
+      tags: 
+      - todolist_items
+      requestBody:
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/todolist_item'
+      responses:
+        '201':
+          description: when request and response apis 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_status'
+    delete:
+      summary: Call Lambda to delete all data in s3
+      description: delete all ToDoList items
+      parameters:
+        - name: user_id
+          required: true
+          in: path 
+          schema:
+            $ref: '#/components/schemas/user_id'
+      tags:
+      - todolist_items
+      requestBody:
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/user_id'
+      responses:
+        '200':
+          description: when request and response apis 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_status'
+
+  '/user/{user_id}': #CRUD api requests ToDoList UserID in s3
+    get:
+      summary: read user_id in s3
+      description: Refer ToDoList userid in s3
+      parameters:
+        - name: user_id
+          in: path 
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user_id'
+      tags:
+      - user
+      responses:
+        '200':
+          description: when request and response apis 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_status'
+    post:
+      summary: add user_id in s3
+      description: Add ToDoList new userid
+      parameters:
+        - name: user_id
+          in: path 
+          required: true
+          schema:
+            $ref: '#/components/schemas/user_id'
+      tags:
+      - user
+      responses:
+        '201':
+          description: when request and response apis 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_status'
+    put: #check if the same id exists
+      summary: put ToDoList new info in user_id
+      description: Modify ToDoList existing user_id
+      parameters:
+        - name: user_id
+          in: path
+          schema:
+            $ref: '#/components/schemas/user_id'
+          required: true
+      tags:
+      - user
+      responses:
+        '201':
+          description: when request and response apis 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_status'
+    delete:
+      summary: delete user_id in s3
+      description: Delete ToDoList userid
+      parameters:
+        - name: user_id
+          in: path
+          schema:
+            $ref: '#/components/schemas/user_id'
+          required: true
+      tags:
+      - user
+      responses:
+        '200':
+          description: when request and response apis 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_status'
+
+
+components:
+  schemas:
+    user_id:
+      description: ToDoList user identification
+      type: string
+      format: uuid
+      example: 3a932c3f-34dd-4b02-8d26-eaa2c843c222
+      readOnly: true
+    todolist_item:
+      description: ToDolist user items
+      type: string
+      maxLength: 12
+      example: FirstToDo!
+      required:
+        - "user_id"
+    response_status:
+      description: post or put response check
+      type: boolean
+
+  # components are for ref from everywhere like environments we can use $ref in paths from components I will need to check more carefully here...
+
+externalDocs: #for reference info
+  description: Learn more how to write openapi here
+  url: https://swagger.io/specification/, https://qiita.com/halhorn/items/e47673eecc4a01ffb3a0
+

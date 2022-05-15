@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: This is app server for react!
+  
+Parameters:
+  
+Metadata:
+  
+Mappings:
+  
+Conditions:
+  
+Resources:
+  AppServerS3ToDoList:
+    Type: AWS::S3::Bucket
+    Properties:
+      # AccessControl: "public-read"
+      BucketName: "app-server-todolist"
+      LifecycleConfiguration:
+        Rules: 
+          - Id: StopMultipartUpload # just in case of you are about to upload the huge file at one time...
+            Status: Enable
+            AbortIncompleteMultipartUpload:
+            - DaysAfterInitiation: 1
+          - Id : NoncurrentVersionExpiration 
+            Status: Enable
+            NoncurrentVersionExpiration:
+            -   NewerNoncurrentVersions: 1 # only for latest ver
+                NoncurrentDays: 10 # retain 10 days for older ver
+      # LoggingConfiguration: 
+      #   DestinationBucketName: "log-server-todolist" 
+      #   LogFilePrefix: "accesslog"
+      # Q1 これって必要だっけ？ただドキュメントを見る感じ、なんでセキュリティに加えてとかこの料金なのかも追いやすいのとここからlogs3にlogを送る分にはお金がかからないらしいのであってもよさそうかな？
+      # https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-server-access-logging.html
+      # NotificationConfiguration:
+      #   LambdaConfigurations:
+      #     - 
+      # Q2 これって必要だっけ？そもそもlambdaたちがapigateway-appsv, appsv-dbsvのどっちの間にいるんだっけ？やっぱ前者だけよね？
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      Tags:
+        Tags
+      VersioningConfiguration:
+        Status: "false"
+      WebsiteConfiguration:
+        ErrorDocument: "String"
+        IndexDocument: "String"
+        RoutingRules:
+          -
+Transform:
+  
+Outputs:

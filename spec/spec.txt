@@ -1,0 +1,15 @@
+(仕様書メモ):2022/02/12
+方針：CognitoAPIの中にこいつらを組み込む
+→もう少しCognitoAPIを調べる必要アリ
+
+(API仕様書)
+方針：基本的にどのparamにどんなvalが入っているかわからなくなると困るので一応コメント付きのものとなしのものを両方用意する
+・DELETE:s3にpostされたData(オブジェクト)を削除
+・POST: application/json 形式でs3にdataファイルをputする
+Data type: String (変換したいvalはpython内部で設定）
+→フロントエンドからjsonで来るのでどうせStringになるため
+・GET:
+- CreatedAt(ユーザID)(Cognitoでできる？)
+→それぞれのユーザごとのToDoListを表示させるため
+- クエリパラメータRead用のもの
+→特定のData(ToDo)検索用
