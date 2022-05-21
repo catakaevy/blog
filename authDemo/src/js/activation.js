@@ -48,7 +48,7 @@ var activate = function () {
         $("div#message span").append(err.message);
       }
     } else {
-      // アクティベーション成功の場合、サインイン画面に遷移
+      // TODO(チン):アクティベーション成功の場合、サインイン画面に遷移
     }
   });
 };
