@@ -63,7 +63,7 @@ var signIn = function () {
       console.log("refreshToken : " + refreshToken);
 
       // サインイン成功の場合、次の画面へ遷移
-      window.open("../menu.html", "_blank");
+      window.open("menu.html", "_blank");
     },
 
     onFailure: function (err) {
